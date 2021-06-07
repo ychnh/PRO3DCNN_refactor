@@ -1,4 +1,5 @@
 __pycache__
-.pth
-.png
-data
+*.pth
+*.png
+*.pkl
+pdbstyle-2.07
