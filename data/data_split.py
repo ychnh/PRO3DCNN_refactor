@@ -8,41 +8,53 @@ import util
 X = util.unpickle('./scope_data.pkl') #['nID', 'sID', 'CA', 'SEQ', 'CLS']
 
 from collections import defaultdict
-S = defaultdict(lambda: defaultdict(int) )
+
 
 def FOLD(CLS): return CLS[0] + str(CLS[1])
-def SFAM(CLS): return CLS[2]
+def FAM(CLS): return str(CLS[2]) + '.' + str(CLS[3])
 
+
+cnt_family2fold = defaultdict(lambda: defaultdict(int) )
 
 for x in X:
-    CLS = x['CLS']
-    fold = FOLD(CLS)
-    sfam = SFAM(CLS)
+    fold,fam = FOLD(x['CLS']),FAM(x['CLS'])
+
     if fold[0] in 'hijkl': continue
-    S[fold][sfam] += 1
+    
+    cnt_family = cnt_family2fold[fold]
+    cnt_family[fam] += 1
 
-TOTAL = 0
 
-sing_sfam = 0
-sing_sfam_count = 0
+''' STATISTICS
+total_cnt = 0
+single_family_count = 0
+single_family_fold = []
+for fold, cnt_family in cnt_family2fold.items():
 
-countsfam = 0
-for fold in S:
-    SFAMS = S[fold]
-    fstat = []
+    for family,cnt in cnt_family.items():
+        print(fold, family, cnt)
+        if len(cnt_family)==1: single_family_count += cnt
+        total_cnt += cnt
 
-    if len(SFAMS)==1: sing_sfam+=1
+    if len(cnt_family)==1: single_family_fold.append( (fold,cnt) )
 
-    for sfam in SFAMS:
-        countsfam += 1
-        count = SFAMS[sfam]
-        fstat.append( (sfam,count) )
-        if len(SFAMS)==1: sing_sfam_count+=count
-        
-        #print(sfam, count)
-        TOTAL += count
 
-print( TOTAL, len(X), countsfam, len(S), sing_sfam, sing_sfam_count)
+if len(cnt_family)==1: single_family_fold.append( (fold,cnt) )
+#print( sorted( single_family_fold, key=lambda x: x[1]) )
+#print( 'No. single family folds:', len(single_family_fold) )
+#print( 'Number of proteins that have belong in single family folds:', single_family_count, '/', total_cnt )
+'''
+
+
+# TODO Time to split algorithm
+for fold, cnt_family in cnt_family2fold.items():
+
+    if len(cnt_family)==1: continue
+    x = [ (family,cnt) for family,cnt in cnt_family.items()]
+    print(fold,x)
+
+
+
 
 ''' Ordered print
 def order(fold):
