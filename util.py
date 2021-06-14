@@ -65,6 +65,8 @@ def parse_pdb(pdbfile):
             cls = [ cls[0], int(cls[1]), int(cls[2]), int(cls[3]) ]
         if line.startswith('REMARK  99 ASTRAL Source-PDB:'):# 1dlw
             src = line.split()[4]
+        if line.startswith('REMARK  99 ASTRAL Region:' ):
+            region = line[24:]
         if line.startswith('ATOM'):
             chain=line[21]
             dict_pdb[chain].append(line)
@@ -72,7 +74,7 @@ def parse_pdb(pdbfile):
     #key=chains[chain_number-1]
     #return (dict_pdb[key])
 
-    return dict_pdb,cls,src
+    return dict_pdb,cls,src,region
 
 def get_xyz(pdb):
     SLINES = []

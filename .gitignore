@@ -3,3 +3,10 @@ __pycache__
 *.png
 *.pkl
 pdbstyle-2.07
+targetDB*
+resultDB*
+queryDB*
+train.fasta
+test.fasta
+tmp
+
